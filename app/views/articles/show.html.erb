@@ -1,0 +1,55 @@
+<h1 align="center">
+<u>
+  <strong><%= @article.title %></strong>
+  </u>
+</h1>
+ 
+<p>
+	<center>
+  <%= @article.text %></center>
+</p>
+ 
+<h2>Comments</h2>
+
+<% @article.comments.each do |comment| %>
+  <p>
+    <strong><%= comment.commenter %> : </strong>
+    <%= comment.body %>
+  </p>
+  <p>
+  <%= link_to 'Delete Comment', [comment.article, comment],
+               method: :delete,
+               data: { confirm: 'Are you sure?' } %>
+	</p>
+<% end %>
+ 
+<h2>Add a comment:</h2>
+<%= form_for([@article, @article.comments.build]) do |f| %>
+<% if @article.comments.build.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@article.errors.count, "error") %> prohibited
+        this article from being saved:
+      </h2>
+      <ul>
+        <% @article.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <p>
+    <%= f.label :name %><br>
+    <%= f.text_field :commenter %>
+  </p>
+  <p>
+    <%= f.label :comment %><br>
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+ 
+<%= link_to 'Edit', edit_article_path(@article) %> |
+<%= link_to 'Back', articles_path %>
